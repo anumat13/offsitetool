@@ -64,7 +64,7 @@ export const createSessionAPI = async (sessionData) => {
 
 export const fetchSessionDetailsAPI = async (sessionId) => {
     // Use the non-admin endpoint for session details
-    const response = await fetch(`/api/session/${sessionId}`, {
+    const response = await fetch(`https://offsitetool.onrender.com/api/session/${sessionId}`, {
         method: 'GET',
         headers: getAuthHeaders()
     });
@@ -73,7 +73,7 @@ export const fetchSessionDetailsAPI = async (sessionId) => {
 
 export const fetchSessionTeamsAPI = async (sessionId) => {
     // Use non-admin endpoint for teams since backend only has /api/session/:sessionId/teams
-    const response = await fetch(`/api/session/${sessionId}/teams`, {
+    const response = await fetch(`https://offsitetool.onrender.com/api/session/${sessionId}/teams`, {
         method: 'GET',
         headers: getAuthHeaders()
     });
