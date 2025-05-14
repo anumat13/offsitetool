@@ -17,7 +17,7 @@ function Home() {
   const fetchAndUpdateSessionStatus = async () => {
     if (sessionId) {
       try {
-        const res = await fetch(`/api/session/${sessionId}`);
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
         const data = await res.json();
         if (res.ok && data.session) {
           if (data.session.isActive === false) {
@@ -42,7 +42,7 @@ function Home() {
       }
     } else {
       try {
-        const res = await fetch('/api/admin/sessions/recent');
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/sessions/recent`);
         const data = await res.json();
         const activeSessions = Array.isArray(data.sessions)
           ? data.sessions.filter(s => s.isActive !== false)

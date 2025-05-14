@@ -30,7 +30,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
       // Auto-submit logic
       const submitForm = async () => {
         try {
-          const res = await fetch('/api/team/submit', {
+          const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/team/submit`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -51,7 +51,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
             // Start polling for voting to open
             pollingRef.current = setInterval(async () => {
               try {
-                const voteRes = await fetch(`/api/session/${sessionId}`);
+                const voteRes = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
                 const voteData = await voteRes.json();
                 if (voteData.session && voteData.session.votingOpen) {
                   clearInterval(pollingRef.current);
@@ -81,7 +81,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
         return;
       }
       try {
-        const res = await fetch(`/api/session/${sessionId}`);
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
         const data = await res.json();
         
         // If session doesn't exist or is not active, redirect to home
@@ -115,7 +115,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
     const interval = setInterval(async () => {
       if (sessionId) {
         try {
-          const res = await fetch(`/api/session/${sessionId}`);
+          const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
           const data = await res.json();
           if (data.session && data.session.submissionTimerEnabled && data.session.submissionTimerEndTime) {
             const endTime = new Date(data.session.submissionTimerEndTime);
@@ -173,7 +173,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
     if (!sessionId) return;
     pollingRef.current = setInterval(async () => {
       try {
-        const res = await fetch(`/api/session/${sessionId}`);
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
         const data = await res.json();
         if (data.session && data.session.isActive === false) {
           clearInterval(pollingRef.current);
@@ -199,7 +199,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
     if (!autoSubmit) setMessage('');
     
     try {
-      const res = await fetch('/api/team/submit', {
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/team/submit`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -220,7 +220,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
         // Start polling for votingOpen
         pollingRef.current = setInterval(async () => {
           try {
-            const sessionRes = await fetch(`/api/session/${sessionId}`);
+            const sessionRes = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
             const sessionData = await sessionRes.json();
             if (sessionData.session && sessionData.session.votingOpen) {
               clearInterval(pollingRef.current);

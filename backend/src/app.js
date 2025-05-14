@@ -31,7 +31,27 @@ app.use((req, res, next) => {
 });
 console.log('[DEBUG] app.js: Request logging middleware configured');
 
-app.use(cors()); // General CORS for Express routes
+const allowedOrigins = [
+  process.env.FRONTEND_URL_BASE, // Your Vercel URL from env
+  'http://localhost:3000',       // Default for local React dev server
+  'http://localhost:3001',       // Another common local port
+  // Add any other specific origins you need to allow
+].filter(Boolean); // Filter out undefined/null if FRONTEND_URL_BASE is not set
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true // If you need to handle cookies or authorization headers
+};
+
+app.use(cors(corsOptions)); // Apply specific CORS options
 console.log('[DEBUG] app.js: General CORS middleware configured');
 
 // MongoDB Connection

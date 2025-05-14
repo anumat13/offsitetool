@@ -14,11 +14,11 @@ function SessionCreate() {
 
   // Fetch sessions on mount and after changes
   const fetchSessions = () => {
-    fetch('/api/admin/sessions/recent')
+    fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/sessions/recent`)
       .then(res => res.json())
       .then(data => setRecentSessions(data.sessions || []))
       .catch(() => setRecentSessions([]));
-    fetch('/api/admin/sessions/all')
+    fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/sessions/all`)
       .then(res => res.json())
       .then(data => {
         setAllSessions(data.sessions || []);
@@ -39,7 +39,7 @@ function SessionCreate() {
       return;
     }
     try {
-      const res = await fetch('/api/admin/session', {
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ function SessionCreate() {
   // Fetch session info by ID
   const fetchSessionInfo = async (id) => {
     try {
-      const res = await fetch(`/api/session/${id}`);
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${id}`);
       const data = await res.json();
       if (res.ok) {
         setSessionInfo(data.session);

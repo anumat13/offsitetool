@@ -1,4 +1,4 @@
-const BASE_URL = '/api/admin';
+const BASE_URL = `${process.env.REACT_APP_API_BASE_URL || ''}/api/admin`;
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem('jwtToken');

@@ -20,7 +20,7 @@ function VotingStatsTable({ sessionId }) {
       const teamsData = await fetchSessionTeamsAPI(sessionId);
       
       // Fetch session data to check voting status
-      const sessionResponse = await fetch(`/api/session/${sessionId}`);
+      const sessionResponse = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
       const sessionData = await sessionResponse.json();
       setSession(sessionData.session);
       

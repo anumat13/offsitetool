@@ -55,7 +55,7 @@ function Results() {
     if (!sessionId) return;
     pollingRef.current = setInterval(async () => {
       try {
-        const res = await fetch(`/api/session/${sessionId}`);
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
         const data = await res.json();
         if (data.session && data.session.isActive === false) {
           clearInterval(pollingRef.current);
@@ -74,7 +74,7 @@ function Results() {
       setTeams([]);
       setWinners([]);
       try {
-        const sessionRes = await fetch(`/api/session/${sessionId}`);
+        const sessionRes = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
         const sessionData = await sessionRes.json();
         if (!sessionRes.ok || !sessionData.session) {
           setMessage('Session not found.');
@@ -84,7 +84,7 @@ function Results() {
           setMessage('Results are not yet published for this session.');
           return;
         }
-        const res = await fetch(`/api/session/${sessionId}/results`);
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}/results`);
         const data = await res.json();
         if (res.ok) {
           setTeams(data.teams);

@@ -24,7 +24,7 @@ function AdminDashboard() {
   const fetchSessions = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/sessions/all');
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/sessions/all`);
       const data = await res.json();
       if (res.ok) {
         setSessions(data.sessions || []);

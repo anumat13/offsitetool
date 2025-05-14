@@ -8,7 +8,7 @@ function TeamVote() {
     // Check for active session on mount
     const checkActiveSession = async () => {
       try {
-        const res = await fetch('/api/admin/sessions/recent');
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/sessions/recent`);
         const data = await res.json();
         const active = Array.isArray(data.sessions)
           ? data.sessions.find(s => s.isActive !== false)
@@ -50,7 +50,7 @@ function TeamVote() {
     setMessage('');
     try {
       // Fetch session info first
-      const sessionRes = await fetch(`/api/session/${sessionId}`);
+      const sessionRes = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
       const sessionData = await sessionRes.json();
       if (!sessionRes.ok || !sessionData.session) {
         setMessage('Session not found.');
@@ -65,7 +65,7 @@ function TeamVote() {
         setWaiting(true);
         return;
       }
-      const res = await fetch(`/api/session/${sessionId}/teams`);
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}/teams`);
       const data = await res.json();
       if (res.ok) {
         if (data.teams.length === 0) {
@@ -87,7 +87,7 @@ function TeamVote() {
     if (waiting && sessionId) {
       pollingRef.current = setInterval(async () => {
         try {
-          const sessionRes = await fetch(`/api/session/${sessionId}`);
+          const sessionRes = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
           const sessionData = await sessionRes.json();
           if (sessionData.session && sessionData.session.isActive === false) {
             clearInterval(pollingRef.current);
@@ -110,7 +110,7 @@ function TeamVote() {
     if (step === 'waitingResults' && sessionId) {
       pollingRef.current = setInterval(async () => {
         try {
-          const sessionRes = await fetch(`/api/session/${sessionId}`);
+          const sessionRes = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}`);
           const sessionData = await sessionRes.json();
           if (sessionData.session && sessionData.session.isActive === false) {
             clearInterval(pollingRef.current);
@@ -146,7 +146,7 @@ function TeamVote() {
     const teamNameToSubmit = isNotMemberOfTeam ? 'Guest Voter' : voterTeam;
 
     try {
-      const res = await fetch('/api/vote', {
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/votes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
