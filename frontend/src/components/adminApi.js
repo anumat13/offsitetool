@@ -40,7 +40,8 @@ export const createSessionAPI = async (sessionData) => {
 
 export const fetchSessionDetailsAPI = async (sessionId) => {
     // Use the non-admin endpoint for session details
-    const response = await fetch(`/api/session/${sessionId}`, {
+    const API_ROOT = process.env.REACT_APP_API_BASE_URL || '';
+    const response = await fetch(`${API_ROOT}/api/session/${sessionId}`, {
         method: 'GET',
         headers: getAuthHeaders()
     });
@@ -49,7 +50,8 @@ export const fetchSessionDetailsAPI = async (sessionId) => {
 
 export const fetchSessionTeamsAPI = async (sessionId) => {
     // Use non-admin endpoint for teams since backend only has /api/session/:sessionId/teams
-    const response = await fetch(`/api/session/${sessionId}/teams`, {
+    const API_ROOT = process.env.REACT_APP_API_BASE_URL || '';
+    const response = await fetch(`${API_ROOT}/api/session/${sessionId}/teams`, {
         method: 'GET',
         headers: getAuthHeaders()
     });
