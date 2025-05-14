@@ -30,7 +30,7 @@ export const fetchAllSessionsAPI = async () => {
 };
 
 export const createSessionAPI = async (sessionData) => {
-    const response = await fetch(`${BASE_URL}/session/create`, {
+    const response = await fetch(`${BASE_URL}/session`, {
         method: 'POST',
         headers: getAuthHeaders(),
         body: JSON.stringify(sessionData)
