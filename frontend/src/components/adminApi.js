@@ -61,8 +61,9 @@ export const fetchSessionTeamsAPI = async (sessionId) => {
 };
 
 export const fetchSessionSubmissionsAPI = async (sessionId) => {
-    // Use non-admin endpoint for teams since backend only has /api/session/:sessionId/teams
-    const response = await fetch(`/api/session/${sessionId}/teams`, {
+    // Assuming this is intended to fetch teams/submissions via this endpoint
+    const API_ROOT = process.env.REACT_APP_API_BASE_URL || '';
+    const response = await fetch(`${API_ROOT}/api/session/${sessionId}/teams`, {
         method: 'GET',
         headers: getAuthHeaders()
     });
