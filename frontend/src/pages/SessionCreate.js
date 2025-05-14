@@ -82,7 +82,7 @@ function SessionCreate() {
     if (!sessionInfo || !sessionInfo._id) return;
     setMessage('');
     try {
-      const res = await fetch(`/api/admin/session/${sessionInfo._id}/voting`, {
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/session/${sessionInfo._id}/voting`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ votingOpen }),
@@ -102,7 +102,7 @@ function SessionCreate() {
     if (!sessionInfo || !sessionInfo._id) return;
     setMessage('');
     try {
-      const res = await fetch(`/api/admin/session/${sessionInfo._id}/results`, {
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/session/${sessionInfo._id}/results`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resultsPublished }),
@@ -172,7 +172,7 @@ function SessionCreate() {
                 const token = localStorage.getItem('token');
                 if (!token) { setMessage('You must be logged in as admin.'); return; }
                 try {
-                  const res = await fetch(`/api/admin/session/${sessionInfo._id}/end`, {
+                  const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/session/${sessionInfo._id}/end`, {
                     method: 'PATCH',
                     headers: { 'Authorization': 'Bearer ' + token }
                   });
@@ -193,7 +193,7 @@ function SessionCreate() {
                 const token = localStorage.getItem('token');
                 if (!token) { setMessage('You must be logged in as admin.'); return; }
                 try {
-                  const res = await fetch(`/api/admin/session/${sessionInfo._id}`, {
+                  const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/session/${sessionInfo._id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': 'Bearer ' + token }
                   });

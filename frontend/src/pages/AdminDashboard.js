@@ -41,7 +41,7 @@ function AdminDashboard() {
     setLoading(true);
     setSelectedSession(sessionId);
     try {
-      const res = await fetch(`/api/session/${sessionId}/teams`);
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}/teams`);
       const data = await res.json();
       if (res.ok) {
         setTeams(data.teams || []);
@@ -58,7 +58,7 @@ function AdminDashboard() {
   const fetchVotingStats = async (sessionId) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/session/${sessionId}/votes`);
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/session/${sessionId}/votes`);
       const data = await res.json();
       if (res.ok) {
         setVotingStats(data.stats || []);
@@ -73,7 +73,7 @@ function AdminDashboard() {
 
   const fetchAdminUsers = async () => {
     try {
-      const res = await fetch('/api/admin/users');
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/users`);
       const data = await res.json();
       if (res.ok) {
         setAdminUsers(data.admins || []);
@@ -83,7 +83,7 @@ function AdminDashboard() {
 
   const fetchAuditLogs = async () => {
     try {
-      const res = await fetch('/api/admin/audit');
+      const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/audit`);
       const data = await res.json();
       if (res.ok) {
         setAuditLogs(data.logs || []);

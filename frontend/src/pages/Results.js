@@ -8,7 +8,7 @@ function Results() {
     // Check for active session on mount
     const checkActiveSession = async () => {
       try {
-        const res = await fetch('/api/admin/sessions/recent');
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/sessions/recent`);
         const data = await res.json();
         const active = Array.isArray(data.sessions)
           ? data.sessions.find(s => s.isActive !== false)
@@ -33,7 +33,7 @@ function Results() {
   useEffect(() => {
     const findActiveSession = async () => {
       try {
-        const res = await fetch('/api/admin/sessions/recent');
+        const res = await fetch(`${process.env.REACT_APP_API_BASE_URL || ''}/api/admin/sessions/recent`);
         const data = await res.json();
         const active = Array.isArray(data.sessions)
           ? data.sessions.find(s => s.isActive !== false)
