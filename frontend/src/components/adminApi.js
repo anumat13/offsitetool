@@ -1,3 +1,4 @@
+console.log('REACT_APP_API_BASE_URL_FROM_ENV:', process.env.REACT_APP_API_BASE_URL);
 const BASE_URL = `${process.env.REACT_APP_API_BASE_URL || ''}/api/admin`;
 
 const getAuthHeaders = () => {
@@ -30,6 +31,7 @@ export const fetchAllSessionsAPI = async () => {
 };
 
 export const createSessionAPI = async (sessionData) => {
+    console.log('createSessionAPI is attempting to fetch:', `${BASE_URL}/session`);
     const response = await fetch(`${BASE_URL}/session`, {
         method: 'POST',
         headers: getAuthHeaders(),
