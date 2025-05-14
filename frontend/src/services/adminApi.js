@@ -1,4 +1,4 @@
-const BASE_URL = '/api/admin';
+const BASE_URL = 'https://offsitetool.onrender.com/api/admin';
 
 const getAuthHeaders = () => {
     const token = localStorage.getItem('jwtToken');
