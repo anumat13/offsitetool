@@ -280,12 +280,12 @@ function TeamSubmit({ sessionId: propSessionId }) {
                   
                   <div className="form-group" style={{ marginBottom: '16px' }}>
                     <label htmlFor="teamName" style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                      Team Name <span style={{ color: 'red' }}>*</span>
+                      Team Number <span style={{ color: 'red' }}>*</span>
                     </label>
                     <input 
                       id="teamName"
                       type="text" 
-                      placeholder="Enter your team name" 
+                      placeholder="Enter your team number" 
                       value={teamName} 
                       onChange={e => setTeamName(e.target.value)} 
                       required 
@@ -307,7 +307,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
                       style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--mdb-border-color)' }}
                     />
                     <small style={{ display: 'block', marginTop: '4px', color: 'var(--mdb-text-color-light)', fontSize: '0.8rem' }}>
-                      Example: John Doe, Jane Smith, Alex Johnson
+                      Example: John, Jane
                     </small>
                   </div>
                 </div>
@@ -388,12 +388,12 @@ function TeamSubmit({ sessionId: propSessionId }) {
                 <div className="form-section" style={{ marginBottom: '20px' }}>
                   <h3 style={{ fontSize: '1.2rem', color: 'var(--mdb-primary-color)', marginBottom: '16px', borderBottom: '1px solid var(--mdb-border-color)', paddingBottom: '8px' }}>
                     <i className="fas fa-lightbulb" style={{ marginRight: '8px' }}></i>
-                    Product Information
+                    User Story
                   </h3>
                   
                   <div className="form-group" style={{ marginBottom: '16px' }}>
                     <label htmlFor="productTitle" style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                      Product Title <span style={{ color: 'red' }}>*</span>
+                      Problem Statement <span style={{ color: 'red' }}>*</span>
                     </label>
                     <input 
                       id="productTitle"
@@ -405,7 +405,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
                       style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--mdb-border-color)' }}
                     />
                     <small style={{ display: 'block', marginTop: '4px', color: 'var(--mdb-text-color-light)', fontSize: '0.8rem' }}>
-                      A catchy name for your product/solution
+                      A one liner for your problem statement
                     </small>
                   </div>
                   
