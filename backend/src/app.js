@@ -33,6 +33,8 @@ console.log('[DEBUG] app.js: Request logging middleware configured');
 
 const allowedOrigins = [
   process.env.FRONTEND_URL_BASE, // Your Vercel URL from env
+  'https://offsitetool.vercel.app', // Production Vercel URL
+  'https://offsitetool-git-development-anumat13.vercel.app', // Development branch Vercel URL
   'http://localhost:3000',       // Default for local React dev server
   'http://localhost:3001',       // Another common local port
   // Add any other specific origins you need to allow
