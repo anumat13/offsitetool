@@ -172,57 +172,108 @@ function TeamVote() {
       <div className="mongodb-card" style={{ padding: '24px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
         <h2 className="mdb-header-2" style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--mdb-primary-color)' }}>Team Voting</h2>
         
+        {/* Message display */}
+        {message && (
+          <div style={{ 
+            marginBottom: '24px', 
+            padding: '12px', 
+            backgroundColor: message.toLowerCase().includes('success') ? 'var(--mdb-success-color-light)' : 'var(--mdb-warning-color-light)', 
+            borderRadius: '8px',
+            color: message.toLowerCase().includes('success') ? 'var(--mdb-success-color-dark)' : 'var(--mdb-warning-text-color)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <i className={`fas fa-${message.toLowerCase().includes('success') ? 'check-circle' : 'exclamation-triangle'}`}></i>
+            {message}
+          </div>
+        )}
+        
         {step === 'form' && (
-          <form onSubmit={fetchTeams} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div className="form-group">
-              <label htmlFor="voterName" style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Your Name:</label>
-              <input 
-                id="voterName"
-                type="text" 
-                placeholder="Enter your name" 
-                value={voterName} 
-                onChange={e => setVoterName(e.target.value)} 
-                required 
-                style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--mdb-border-color)' }}
-              />
+          <form onSubmit={fetchTeams} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="form-section" style={{ marginBottom: '20px' }}>
+              <h3 style={{ fontSize: '1.2rem', color: 'var(--mdb-primary-color)', marginBottom: '16px', borderBottom: '1px solid var(--mdb-border-color)', paddingBottom: '8px' }}>
+                <i className="fas fa-user" style={{ marginRight: '8px' }}></i>
+                Voter Information
+              </h3>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                <div className="form-group" style={{ marginBottom: '16px' }}>
+                  <label htmlFor="voterName" style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
+                    Your Name <span style={{ color: 'red' }}>*</span>
+                  </label>
+                  <input 
+                    id="voterName"
+                    type="text" 
+                    placeholder="Enter your name" 
+                    value={voterName} 
+                    onChange={e => setVoterName(e.target.value)} 
+                    required 
+                    style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--mdb-border-color)' }}
+                  />
+                </div>
+                
+                <div className="form-group" style={{ marginBottom: '16px' }}>
+                  <label htmlFor="voterTeam" style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
+                    Your Team Name {!isNotMemberOfTeam && <span style={{ color: 'red' }}>*</span>}
+                  </label>
+                  <input 
+                    id="voterTeam"
+                    type="text" 
+                    placeholder={isNotMemberOfTeam ? "Not applicable" : "Enter your team name"} 
+                    value={voterTeam} 
+                    onChange={e => setVoterTeam(e.target.value)} 
+                    required={!isNotMemberOfTeam} 
+                    disabled={isNotMemberOfTeam} 
+                    style={{ 
+                      width: '100%', 
+                      padding: '10px', 
+                      borderRadius: '4px', 
+                      border: '1px solid var(--mdb-border-color)',
+                      backgroundColor: isNotMemberOfTeam ? 'var(--mdb-background-color-light)' : 'white'
+                    }}
+                  />
+                </div>
+              </div>
+              
+              <div className="form-group" style={{ marginTop: '8px' }}> 
+                <label htmlFor="isNotMember" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontWeight: 'normal' }}>
+                  <input
+                    type="checkbox"
+                    id="isNotMember"
+                    checked={isNotMemberOfTeam}
+                    onChange={(e) => {
+                      const isChecked = e.target.checked;
+                      setIsNotMemberOfTeam(isChecked);
+                      if (isChecked) {
+                        setVoterTeam(''); // Clear team name if they check it
+                      }
+                    }}
+                    style={{ marginRight: '8px' }}
+                  />
+                  <span style={{ color: 'var(--mdb-text-color)' }}>I am not a member of any participating team</span>
+                </label>
+              </div>
             </div>
             
-            <div className="form-group"> {/* Checkbox group */}
-              <label htmlFor="isNotMember" style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontWeight: 'normal' }}>
-                <input
-                  type="checkbox"
-                  id="isNotMember"
-                  checked={isNotMemberOfTeam}
-                  onChange={(e) => {
-                    const isChecked = e.target.checked;
-                    setIsNotMemberOfTeam(isChecked);
-                    if (isChecked) {
-                      setVoterTeam(''); // Clear team name if they check it
-                    }
-                  }}
-                  style={{ marginRight: '8px' }}
-                />
-                I am not a member of any participating team.
-              </label>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="voterTeam" style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>Your Team Name:</label>
-              <input 
-                id="voterTeam"
-                type="text" 
-                placeholder={isNotMemberOfTeam ? "Not applicable" : "Enter your team name"} 
-                value={voterTeam} 
-                onChange={e => setVoterTeam(e.target.value)} 
-                required={!isNotMemberOfTeam} 
-                disabled={isNotMemberOfTeam} 
-                style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid var(--mdb-border-color)' }}
-              />
-            </div>
             <button 
               type="submit" 
               className="mdb-btn mdb-btn-primary" 
-              style={{ padding: '12px', marginTop: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              style={{ 
+                padding: '14px', 
+                marginTop: '8px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                gap: '8px',
+                backgroundColor: 'var(--mdb-primary-color)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                fontWeight: 'bold',
+                fontSize: '1rem',
+                cursor: 'pointer'
+              }}
             >
               <i className="fas fa-arrow-right"></i>
               Proceed to Voting
@@ -231,33 +282,104 @@ function TeamVote() {
         )}
         
         {step === 'waiting' && (
-          <div className="waiting-container" style={{ textAlign: 'center', padding: '30px 0' }}>
-            <div className="mdb-spinner" style={{ margin: '0 auto 20px auto' }}></div>
-            <h3 style={{ color: 'var(--mdb-primary-color)', marginBottom: '16px' }}>Waiting for voting to begin...</h3>
-            <p style={{ color: 'var(--mdb-text-color-light)' }}>The admin will open voting shortly. This page will automatically update when voting begins.</p>
+          <div className="waiting-container" style={{ textAlign: 'center', padding: '40px 0' }}>
+            <div className="mdb-spinner" style={{ 
+              margin: '0 auto 20px auto', 
+              width: '50px', 
+              height: '50px', 
+              border: '5px solid var(--mdb-primary-color-light)',
+              borderTopColor: 'var(--mdb-primary-color)',
+              borderRadius: '50%',
+              animation: 'spin 1s linear infinite'
+            }}></div>
+            <h3 style={{ 
+              color: 'var(--mdb-primary-color)', 
+              marginBottom: '16px',
+              fontSize: '1.5rem',
+              fontWeight: 'bold' 
+            }}>Waiting for voting to begin...</h3>
+            <div style={{ 
+              backgroundColor: 'var(--mdb-info-color-light)', 
+              padding: '16px 24px', 
+              borderRadius: '8px',
+              maxWidth: '80%',
+              margin: '0 auto',
+              border: '1px solid var(--mdb-info-color)'
+            }}>
+              <p style={{ color: 'var(--mdb-info-color-dark)', margin: '0' }}>
+                <i className="fas fa-info-circle" style={{ marginRight: '8px' }}></i>
+                The admin will open voting shortly. This page will automatically update when voting begins.
+              </p>
+            </div>
           </div>
         )}
         
         {step === 'vote' && (
           <div className="voting-container">
-            <div 
-              style={{ 
-                marginBottom: '20px', 
-                padding: '12px', 
-                backgroundColor: 'var(--mdb-primary-color-light)', 
-                borderRadius: '8px',
+            <div className="form-section" style={{ marginBottom: '20px' }}>
+              <h3 style={{ 
+                fontSize: '1.2rem', 
+                color: 'var(--mdb-primary-color)', 
+                marginBottom: '16px', 
+                borderBottom: '1px solid var(--mdb-border-color)', 
+                paddingBottom: '8px',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px'
-              }}
-            >
-              <i className="fas fa-user" style={{ color: 'var(--mdb-primary-color)' }}></i>
-              <span style={{ fontWeight: 'bold', color: 'var(--mdb-primary-color)' }}>
-                Voter: {voterName} from Team {voterTeam}
-              </span>
+              }}>
+                <i className="fas fa-user-check"></i>
+                Voter Information
+              </h3>
+              
+              <div 
+                style={{ 
+                  marginBottom: '24px', 
+                  padding: '16px', 
+                  backgroundColor: 'var(--mdb-primary-color-light)', 
+                  borderRadius: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '12px',
+                  border: '1px solid var(--mdb-primary-color)'
+                }}
+              >
+                <div style={{ 
+                  backgroundColor: 'var(--mdb-primary-color)', 
+                  color: 'white', 
+                  width: '40px', 
+                  height: '40px', 
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.2rem'
+                }}>
+                  <i className="fas fa-user"></i>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 'bold', color: 'var(--mdb-primary-color)', fontSize: '1.1rem' }}>
+                    {voterName}
+                  </div>
+                  <div style={{ color: 'var(--mdb-primary-color-dark)', fontSize: '0.9rem' }}>
+                    {isNotMemberOfTeam ? 'Guest Voter' : `Team: ${voterTeam}`}
+                  </div>
+                </div>
+              </div>
             </div>
             
-            <h3 className="mdb-header-3" style={{ marginBottom: '16px' }}>Select a team to vote for:</h3>
+            <h3 style={{ 
+              fontSize: '1.2rem', 
+              color: 'var(--mdb-primary-color)', 
+              marginBottom: '16px', 
+              borderBottom: '1px solid var(--mdb-border-color)', 
+              paddingBottom: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <i className="fas fa-vote-yea"></i>
+              Select a Team to Vote For
+            </h3>
             
             <form onSubmit={handleVote}>
               <div className="teams-grid" style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
@@ -389,22 +511,69 @@ function TeamVote() {
         )}
         
         {step === 'waitingResults' && (
-          <div className="success-container" style={{ textAlign: 'center', padding: '30px 0' }}>
+          <div className="success-container" style={{ textAlign: 'center', padding: '40px 0' }}>
             <div style={{ 
-              width: '80px', 
-              height: '80px', 
+              width: '100px', 
+              height: '100px', 
               borderRadius: '50%', 
               backgroundColor: 'var(--mdb-success-color-light)', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center',
-              margin: '0 auto 20px auto'
+              margin: '0 auto 24px auto',
+              border: '4px solid var(--mdb-success-color)'
             }}>
-              <i className="fas fa-check" style={{ fontSize: '40px', color: 'var(--mdb-success-color)' }}></i>
+              <i className="fas fa-check" style={{ fontSize: '50px', color: 'var(--mdb-success-color)' }}></i>
             </div>
-            <h3 style={{ color: 'var(--mdb-success-color)', marginBottom: '16px' }}>Vote Submitted Successfully!</h3>
-            <p style={{ marginBottom: '24px' }}>Waiting for the admin to publish results...</p>
-            <div className="mdb-spinner mdb-spinner-small" style={{ margin: '0 auto' }}></div>
+            
+            <h3 style={{ 
+              color: 'var(--mdb-success-color)', 
+              marginBottom: '16px',
+              fontSize: '1.8rem',
+              fontWeight: 'bold'
+            }}>
+              Vote Submitted Successfully!
+            </h3>
+            
+            <div style={{ 
+              backgroundColor: 'var(--mdb-success-color-light)', 
+              padding: '16px 24px', 
+              borderRadius: '8px',
+              maxWidth: '80%',
+              margin: '0 auto 32px auto',
+              border: '1px solid var(--mdb-success-color)'
+            }}>
+              <p style={{ color: 'var(--mdb-success-color-dark)', margin: '0' }}>
+                <i className="fas fa-info-circle" style={{ marginRight: '8px' }}></i>
+                Thank you for your vote. The results will be published soon.
+              </p>
+            </div>
+            
+            <div style={{ 
+              padding: '16px', 
+              backgroundColor: 'var(--mdb-background-color-light)', 
+              borderRadius: '8px',
+              maxWidth: '80%',
+              margin: '0 auto',
+              border: '1px solid var(--mdb-border-color)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '16px'
+            }}>
+              <div className="mdb-spinner" style={{ 
+                margin: '0 auto', 
+                width: '40px', 
+                height: '40px', 
+                border: '4px solid var(--mdb-primary-color-light)',
+                borderTopColor: 'var(--mdb-primary-color)',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite'
+              }}></div>
+              <p style={{ color: 'var(--mdb-text-color)', margin: '0' }}>
+                Waiting for the admin to publish results...
+              </p>
+            </div>
             {message && message.toLowerCase().includes('already voted') && (
               <div style={{ 
                 marginTop: '20px', 
