@@ -2,6 +2,38 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminNav from '../components/AdminNav';
 
+// CSS for animations and responsive design
+const styles = {
+  fadeIn: {
+    animation: 'fadeIn 0.5s ease-in-out',
+  },
+  cardHover: {
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    ':hover': {
+      transform: 'translateY(-5px)',
+      boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
+    }
+  },
+  statCard: {
+    padding: '16px',
+    borderRadius: '8px',
+    textAlign: 'center',
+    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+    cursor: 'pointer',
+  },
+  actionButton: {
+    padding: '8px 12px',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '6px',
+    transition: 'background-color 0.2s ease',
+    fontWeight: '500',
+  }
+};
+
 function AdminDashboard() {
   const [sessions, setSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState(null);
@@ -93,8 +125,22 @@ function AdminDashboard() {
 
   return (
     <div className="mongodb-theme" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
-      <div className="mongodb-card" style={{ padding: '24px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', marginBottom: '20px' }}>
-        <h2 className="mdb-header-2" style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--mdb-primary-color)' }}>Admin Dashboard</h2>
+      <div className="mongodb-card" style={{ 
+        padding: '24px', 
+        borderRadius: '12px', 
+        boxShadow: '0 6px 12px rgba(0,0,0,0.1)', 
+        marginBottom: '20px',
+        background: 'linear-gradient(to right, #ffffff, #f8f9fa)'
+      }}>
+        <h2 className="mdb-header-2" style={{ 
+          textAlign: 'center', 
+          marginBottom: '24px', 
+          color: 'var(--mdb-primary-color)',
+          fontSize: '2rem',
+          fontWeight: 'bold',
+          borderBottom: '2px solid var(--mdb-primary-color-light)',
+          paddingBottom: '12px'
+        }}>Admin Dashboard</h2>
         
         {error && (
           <div style={{ 
@@ -124,13 +170,77 @@ function AdminDashboard() {
           </div>
         )}
         
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '24px' }}>
-          {/* Session List */}
+        <div style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', 
+          gap: '24px' 
+        }}>
+          {/* Summary Statistics - Visible on all screen sizes */}
+          <div className="summary-stats" style={{ 
+            gridColumn: '1 / -1', 
+            display: 'grid', 
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
+            gap: '16px',
+            marginBottom: '24px',
+            ...styles.fadeIn
+          }}>
+            <div style={{ 
+              ...styles.statCard,
+              backgroundColor: 'var(--mdb-primary-color-light)', 
+              boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+              border: '1px solid var(--mdb-primary-color-light)'
+            }}>
+              <div style={{ fontSize: '1rem', color: 'var(--mdb-primary-color-dark)', marginBottom: '8px' }}>
+                <i className="fas fa-calendar-alt" style={{ marginRight: '8px' }}></i>
+                Total Sessions
+              </div>
+              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--mdb-primary-color)' }}>
+                {sessions.length}
+              </div>
+            </div>
+            
+            <div style={{ 
+              ...styles.statCard,
+              backgroundColor: 'var(--mdb-success-color-light)', 
+              boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+              border: '1px solid var(--mdb-success-color-light)'
+            }}>
+              <div style={{ fontSize: '1rem', color: 'var(--mdb-success-color-dark)', marginBottom: '8px' }}>
+                <i className="fas fa-users" style={{ marginRight: '8px' }}></i>
+                Active Teams
+              </div>
+              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--mdb-success-color)' }}>
+                {selectedSession ? submissions.length : '—'}
+              </div>
+            </div>
+            
+            <div style={{ 
+              ...styles.statCard,
+              backgroundColor: 'var(--mdb-info-color-light)', 
+              boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+              border: '1px solid var(--mdb-info-color-light)'
+            }}>
+              <div style={{ fontSize: '1rem', color: 'var(--mdb-info-color-dark)', marginBottom: '8px' }}>
+                <i className="fas fa-vote-yea" style={{ marginRight: '8px' }}></i>
+                Total Votes
+              </div>
+              <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--mdb-info-color)' }}>
+                {votingStats.reduce((sum, stat) => sum + (stat.votes || 0), 0)}
+              </div>
+            </div>
+          </div>
+          
+          {/* Main Content Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            {/* Session List */}
           <div className="sessions-panel" style={{ 
-            padding: '16px', 
-            backgroundColor: 'var(--mdb-background-color-light)', 
-            borderRadius: '8px',
-            border: '1px solid var(--mdb-border-color)'
+            padding: '20px', 
+            backgroundColor: 'white', 
+            borderRadius: '10px',
+            border: '1px solid var(--mdb-border-color)',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+            height: 'fit-content',
+            ...styles.fadeIn
           }}>
             <h3 style={{ 
               fontSize: '1.2rem', 
@@ -164,20 +274,26 @@ function AdminDashboard() {
                       key={session._id}
                       onClick={() => fetchSessionDetails(session._id)}
                       style={{ 
-                        padding: '10px', 
+                        padding: '12px', 
                         textAlign: 'left',
                         border: selectedSession === session._id ? 
                           '2px solid var(--mdb-primary-color)' : 
                           '1px solid var(--mdb-border-color)',
-                        borderRadius: '6px',
+                        borderRadius: '8px',
                         backgroundColor: selectedSession === session._id ? 
                           'var(--mdb-primary-color-light)' : 
                           'white',
                         cursor: 'pointer',
-                        transition: 'all 0.2s ease',
+                        transition: 'all 0.3s ease',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '4px'
+                        gap: '6px',
+                        boxShadow: selectedSession === session._id ?
+                          '0 4px 8px rgba(0,0,0,0.1)' :
+                          '0 2px 4px rgba(0,0,0,0.05)',
+                        transform: selectedSession === session._id ?
+                          'translateY(-2px)' :
+                          'none'
                       }}
                     >
                       <div style={{ fontWeight: 'bold' }}>
@@ -219,22 +335,25 @@ function AdminDashboard() {
           
           {/* Session Details */}
           <div className="details-panel" style={{ 
-            padding: '16px', 
-            backgroundColor: 'var(--mdb-background-color-light)', 
-            borderRadius: '8px',
-            border: '1px solid var(--mdb-border-color)'
+            padding: '20px', 
+            backgroundColor: 'white', 
+            borderRadius: '10px',
+            border: '1px solid var(--mdb-border-color)',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+            ...styles.fadeIn
           }}>
             {selectedSession ? (
               <>
                 <h3 style={{ 
-                  fontSize: '1.2rem', 
+                  fontSize: '1.3rem', 
                   color: 'var(--mdb-primary-color)', 
                   marginBottom: '16px', 
-                  borderBottom: '1px solid var(--mdb-border-color)', 
-                  paddingBottom: '8px',
+                  borderBottom: '2px solid var(--mdb-primary-color-light)', 
+                  paddingBottom: '10px',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px'
+                  gap: '10px',
+                  fontWeight: 'bold'
                 }}>
                   <i className="fas fa-info-circle"></i>
                   Session Details
@@ -243,15 +362,21 @@ function AdminDashboard() {
                 {/* Session Stats */}
                 <div className="session-stats" style={{ 
                   display: 'grid', 
-                  gridTemplateColumns: '1fr 1fr 1fr', 
-                  gap: '12px',
-                  marginBottom: '20px'
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', 
+                  gap: '16px',
+                  marginBottom: '24px'
                 }}>
                   <div style={{ 
-                    padding: '12px', 
+                    padding: '16px', 
                     backgroundColor: 'var(--mdb-primary-color-light)', 
-                    borderRadius: '6px',
-                    textAlign: 'center'
+                    borderRadius: '10px',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+                    border: '1px solid var(--mdb-primary-color-light)',
+                    transition: 'transform 0.3s ease',
+                    ':hover': {
+                      transform: 'translateY(-3px)'
+                    }
                   }}>
                     <div style={{ fontSize: '0.8rem', color: 'var(--mdb-primary-color-dark)' }}>Teams</div>
                     <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--mdb-primary-color)' }}>
@@ -260,10 +385,16 @@ function AdminDashboard() {
                   </div>
                   
                   <div style={{ 
-                    padding: '12px', 
+                    padding: '16px', 
                     backgroundColor: 'var(--mdb-success-color-light)', 
-                    borderRadius: '6px',
-                    textAlign: 'center'
+                    borderRadius: '10px',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+                    border: '1px solid var(--mdb-success-color-light)',
+                    transition: 'transform 0.3s ease',
+                    ':hover': {
+                      transform: 'translateY(-3px)'
+                    }
                   }}>
                     <div style={{ fontSize: '0.8rem', color: 'var(--mdb-success-color-dark)' }}>Submissions</div>
                     <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--mdb-success-color)' }}>
@@ -272,10 +403,16 @@ function AdminDashboard() {
                   </div>
                   
                   <div style={{ 
-                    padding: '12px', 
+                    padding: '16px', 
                     backgroundColor: 'var(--mdb-info-color-light)', 
-                    borderRadius: '6px',
-                    textAlign: 'center'
+                    borderRadius: '10px',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+                    border: '1px solid var(--mdb-info-color-light)',
+                    transition: 'transform 0.3s ease',
+                    ':hover': {
+                      transform: 'translateY(-3px)'
+                    }
                   }}>
                     <div style={{ fontSize: '0.8rem', color: 'var(--mdb-info-color-dark)' }}>Votes Cast</div>
                     <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--mdb-info-color)' }}>
@@ -289,16 +426,24 @@ function AdminDashboard() {
                   <button 
                     onClick={() => fetchVotingStats(selectedSession)}
                     style={{ 
-                      padding: '6px 12px', 
+                      padding: '8px 14px', 
                       backgroundColor: 'var(--mdb-primary-color)',
                       color: 'white',
                       border: 'none',
-                      borderRadius: '4px',
+                      borderRadius: '6px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '6px',
-                      fontSize: '0.9rem'
+                      gap: '8px',
+                      fontSize: '0.95rem',
+                      fontWeight: '500',
+                      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                      transition: 'all 0.2s ease',
+                      ':hover': {
+                        backgroundColor: 'var(--mdb-primary-color-dark)',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.15)'
+                      }
                     }}
                   >
                     <i className="fas fa-chart-bar"></i>
@@ -307,13 +452,13 @@ function AdminDashboard() {
                 </div>
                 
                 <div style={{ maxHeight: '400px', overflowY: 'auto', marginBottom: '20px' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0', borderRadius: '8px', overflow: 'hidden' }}>
                     <thead>
                       <tr style={{ backgroundColor: 'var(--mdb-primary-color-light)' }}>
-                        <th style={{ padding: '8px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)' }}>Team Name</th>
-                        <th style={{ padding: '8px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)' }}>Product Title</th>
-                        <th style={{ padding: '8px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)' }}>Submitted At</th>
-                        <th style={{ padding: '8px', textAlign: 'center', borderBottom: '2px solid var(--mdb-primary-color)' }}>Actions</th>
+                        <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Team Name</th>
+                        <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Product Title</th>
+                        <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Submitted At</th>
+                        <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -337,32 +482,44 @@ function AdminDashboard() {
                             <td style={{ padding: '8px', textAlign: 'center' }}>
                               <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
                                 <button 
-                                  disabled 
+                                  title="View Details"
                                   style={{ 
-                                    padding: '4px 8px', 
+                                    padding: '6px 10px', 
                                     backgroundColor: 'var(--mdb-info-color-light)',
                                     color: 'var(--mdb-info-color)',
                                     border: 'none',
-                                    borderRadius: '4px',
-                                    opacity: 0.6,
-                                    cursor: 'not-allowed'
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                                    ':hover': {
+                                      backgroundColor: 'var(--mdb-info-color)',
+                                      color: 'white'
+                                    }
                                   }}
+                                  onClick={() => alert(`View details for ${team.teamName}`)}
                                 >
-                                  <i className="fas fa-edit"></i>
+                                  <i className="fas fa-eye"></i>
                                 </button>
                                 <button 
-                                  disabled 
+                                  title="Edit Team"
                                   style={{ 
-                                    padding: '4px 8px', 
-                                    backgroundColor: 'var(--mdb-danger-color-light)',
-                                    color: 'var(--mdb-danger-color)',
+                                    padding: '6px 10px', 
+                                    backgroundColor: 'var(--mdb-warning-color-light)',
+                                    color: 'var(--mdb-warning-color)',
                                     border: 'none',
-                                    borderRadius: '4px',
-                                    opacity: 0.6,
-                                    cursor: 'not-allowed'
+                                    borderRadius: '6px',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s ease',
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                                    ':hover': {
+                                      backgroundColor: 'var(--mdb-warning-color)',
+                                      color: 'white'
+                                    }
                                   }}
+                                  onClick={() => alert(`Edit ${team.teamName}`)}
                                 >
-                                  <i className="fas fa-trash"></i>
+                                  <i className="fas fa-edit"></i>
                                 </button>
                               </div>
                             </td>
@@ -422,10 +579,13 @@ function AdminDashboard() {
           
           {/* Admin Users & Audit */}
           <div className="admin-panel" style={{ 
-            padding: '16px', 
-            backgroundColor: 'var(--mdb-background-color-light)', 
-            borderRadius: '8px',
-            border: '1px solid var(--mdb-border-color)'
+            padding: '20px', 
+            backgroundColor: 'white', 
+            borderRadius: '10px',
+            border: '1px solid var(--mdb-border-color)',
+            boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
+            height: 'fit-content',
+            ...styles.fadeIn
           }}>
             <h3 style={{ 
               fontSize: '1.2rem', 
@@ -458,13 +618,20 @@ function AdminDashboard() {
                     <div 
                       key={admin._id}
                       style={{ 
-                        padding: '8px 12px', 
+                        padding: '10px 14px', 
                         backgroundColor: 'white', 
-                        borderRadius: '4px',
+                        borderRadius: '8px',
                         border: '1px solid var(--mdb-border-color)',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '8px'
+                        gap: '10px',
+                        boxShadow: '0 2px 4px rgba(0,0,0,0.05)',
+                        transition: 'all 0.2s ease',
+                        ':hover': {
+                          borderColor: 'var(--mdb-primary-color-light)',
+                          transform: 'translateY(-2px)',
+                          boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                        }
                       }}
                     >
                       <i className="fas fa-user" style={{ color: 'var(--mdb-primary-color)' }}></i>
@@ -493,8 +660,9 @@ function AdminDashboard() {
               maxHeight: '200px', 
               overflowY: 'auto',
               border: '1px solid var(--mdb-border-color)',
-              borderRadius: '4px',
-              backgroundColor: 'white'
+              borderRadius: '8px',
+              backgroundColor: 'white',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.05)'
             }}>
               {auditLogs.length === 0 ? (
                 <div style={{ padding: '12px', textAlign: 'center', color: 'var(--mdb-text-color-light)' }}>
@@ -506,9 +674,13 @@ function AdminDashboard() {
                     <div 
                       key={log._id}
                       style={{ 
-                        padding: '8px 12px', 
+                        padding: '10px 14px', 
                         borderBottom: '1px solid var(--mdb-border-color)',
-                        fontSize: '0.9rem'
+                        fontSize: '0.9rem',
+                        transition: 'background-color 0.2s ease',
+                        ':hover': {
+                          backgroundColor: 'var(--mdb-background-color-light)'
+                        }
                       }}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
