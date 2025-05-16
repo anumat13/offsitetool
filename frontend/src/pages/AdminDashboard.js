@@ -92,96 +92,438 @@ function AdminDashboard() {
   };
 
   return (
-    <div className="mongodb-theme">
-      <h2>Admin Dashboard</h2>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      {loading && <div>Loading...</div>}
-      <div style={{ display: 'flex', gap: 32 }}>
-        {/* Session List */}
-        <div style={{ flex: 1 }}>
-          <h3>Sessions</h3>
-          <ul>
-            {sessions.map(session => (
-              <li key={session._id}>
-                <button onClick={() => fetchSessionDetails(session._id)}>
-                  {session.title || session._id} ({session.isActive ? 'Active' : session.resultsPublished ? 'Completed' : 'Upcoming'})
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        {/* Session Details */}
-        <div style={{ flex: 2 }}>
-          {selectedSession && (
-            <>
-              <h3>Session Details</h3>
-              <button onClick={() => fetchVotingStats(selectedSession)}>Show Voting Stats</button>
-              <h4>Teams & Submissions</h4>
-              <table style={{ width: '100%' }}>
-                <thead>
-                  <tr>
-                    <th>Team Name</th>
-                    <th>Product Title</th>
-                    <th>Submitted At</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {submissions.map(team => (
-                    <tr key={team._id}>
-                      <td>{team.teamName}</td>
-                      <td>{team.productTitle}</td>
-                      <td>{team.submittedAt ? new Date(team.submittedAt).toLocaleString() : '-'}</td>
-                      <td>
-                        {/* Optionally add edit/delete buttons here */}
-                        <button disabled>Edit</button>
-                        <button disabled>Delete</button>
-                      </td>
-                    </tr>
+    <div className="mongodb-theme" style={{ maxWidth: '1200px', margin: '0 auto', padding: '20px' }}>
+      <div className="mongodb-card" style={{ padding: '24px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)', marginBottom: '20px' }}>
+        <h2 className="mdb-header-2" style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--mdb-primary-color)' }}>Admin Dashboard</h2>
+        
+        {error && (
+          <div style={{ 
+            marginBottom: '24px', 
+            padding: '12px', 
+            backgroundColor: 'var(--mdb-danger-color-light)', 
+            borderRadius: '8px',
+            color: 'var(--mdb-danger-color-dark)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}>
+            <i className="fas fa-exclamation-triangle"></i>
+            {error}
+          </div>
+        )}
+        
+        {loading && (
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            padding: '20px'
+          }}>
+            <div className="mdb-spinner"></div>
+            <span style={{ marginLeft: '10px' }}>Loading...</span>
+          </div>
+        )}
+        
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr 1fr', gap: '24px' }}>
+          {/* Session List */}
+          <div className="sessions-panel" style={{ 
+            padding: '16px', 
+            backgroundColor: 'var(--mdb-background-color-light)', 
+            borderRadius: '8px',
+            border: '1px solid var(--mdb-border-color)'
+          }}>
+            <h3 style={{ 
+              fontSize: '1.2rem', 
+              color: 'var(--mdb-primary-color)', 
+              marginBottom: '16px', 
+              borderBottom: '1px solid var(--mdb-border-color)', 
+              paddingBottom: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <i className="fas fa-list"></i>
+              Sessions
+            </h3>
+            
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontSize: '0.9rem', color: 'var(--mdb-text-color-light)', marginBottom: '8px' }}>
+                Select a session to view details:
+              </div>
+            </div>
+            
+            <div className="session-list" style={{ maxHeight: '400px', overflowY: 'auto' }}>
+              {sessions.length === 0 ? (
+                <div style={{ padding: '12px', textAlign: 'center', color: 'var(--mdb-text-color-light)' }}>
+                  No sessions found
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {sessions.map(session => (
+                    <button 
+                      key={session._id}
+                      onClick={() => fetchSessionDetails(session._id)}
+                      style={{ 
+                        padding: '10px', 
+                        textAlign: 'left',
+                        border: selectedSession === session._id ? 
+                          '2px solid var(--mdb-primary-color)' : 
+                          '1px solid var(--mdb-border-color)',
+                        borderRadius: '6px',
+                        backgroundColor: selectedSession === session._id ? 
+                          'var(--mdb-primary-color-light)' : 
+                          'white',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px'
+                      }}
+                    >
+                      <div style={{ fontWeight: 'bold' }}>
+                        {session.title || session.sessionName || session._id}
+                      </div>
+                      <div style={{ 
+                        fontSize: '0.8rem', 
+                        display: 'flex', 
+                        gap: '8px',
+                        alignItems: 'center'
+                      }}>
+                        <span style={{ 
+                          padding: '2px 6px', 
+                          borderRadius: '12px', 
+                          backgroundColor: session.isActive ? 
+                            'var(--mdb-success-color-light)' : 
+                            session.resultsPublished ? 
+                              'var(--mdb-warning-color-light)' : 
+                              'var(--mdb-info-color-light)',
+                          color: session.isActive ? 
+                            'var(--mdb-success-color-dark)' : 
+                            session.resultsPublished ? 
+                              'var(--mdb-warning-color-dark)' : 
+                              'var(--mdb-info-color-dark)',
+                          fontSize: '0.75rem'
+                        }}>
+                          {session.isActive ? 'Active' : session.resultsPublished ? 'Completed' : 'Upcoming'}
+                        </span>
+                        <span style={{ color: 'var(--mdb-text-color-light)', fontSize: '0.75rem' }}>
+                          Created: {new Date(session.createdAt || Date.now()).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </button>
                   ))}
-                </tbody>
-              </table>
-              {/* Voting Stats */}
-              {votingStats.length > 0 && (
-                <div>
-                  <h4>Voting Progress</h4>
-                  <table style={{ width: '100%' }}>
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Session Details */}
+          <div className="details-panel" style={{ 
+            padding: '16px', 
+            backgroundColor: 'var(--mdb-background-color-light)', 
+            borderRadius: '8px',
+            border: '1px solid var(--mdb-border-color)'
+          }}>
+            {selectedSession ? (
+              <>
+                <h3 style={{ 
+                  fontSize: '1.2rem', 
+                  color: 'var(--mdb-primary-color)', 
+                  marginBottom: '16px', 
+                  borderBottom: '1px solid var(--mdb-border-color)', 
+                  paddingBottom: '8px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}>
+                  <i className="fas fa-info-circle"></i>
+                  Session Details
+                </h3>
+                
+                {/* Session Stats */}
+                <div className="session-stats" style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: '1fr 1fr 1fr', 
+                  gap: '12px',
+                  marginBottom: '20px'
+                }}>
+                  <div style={{ 
+                    padding: '12px', 
+                    backgroundColor: 'var(--mdb-primary-color-light)', 
+                    borderRadius: '6px',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--mdb-primary-color-dark)' }}>Teams</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--mdb-primary-color)' }}>
+                      {submissions.length}
+                    </div>
+                  </div>
+                  
+                  <div style={{ 
+                    padding: '12px', 
+                    backgroundColor: 'var(--mdb-success-color-light)', 
+                    borderRadius: '6px',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--mdb-success-color-dark)' }}>Submissions</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--mdb-success-color)' }}>
+                      {submissions.filter(team => team.submittedAt).length}
+                    </div>
+                  </div>
+                  
+                  <div style={{ 
+                    padding: '12px', 
+                    backgroundColor: 'var(--mdb-info-color-light)', 
+                    borderRadius: '6px',
+                    textAlign: 'center'
+                  }}>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--mdb-info-color-dark)' }}>Votes Cast</div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--mdb-info-color)' }}>
+                      {votingStats.reduce((sum, stat) => sum + (stat.votes || 0), 0)}
+                    </div>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+                  <h4 style={{ margin: 0 }}>Teams & Submissions</h4>
+                  <button 
+                    onClick={() => fetchVotingStats(selectedSession)}
+                    style={{ 
+                      padding: '6px 12px', 
+                      backgroundColor: 'var(--mdb-primary-color)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '4px',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontSize: '0.9rem'
+                    }}
+                  >
+                    <i className="fas fa-chart-bar"></i>
+                    Show Voting Stats
+                  </button>
+                </div>
+                
+                <div style={{ maxHeight: '400px', overflowY: 'auto', marginBottom: '20px' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                     <thead>
-                      <tr>
-                        <th>Team</th>
-                        <th>Votes</th>
+                      <tr style={{ backgroundColor: 'var(--mdb-primary-color-light)' }}>
+                        <th style={{ padding: '8px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)' }}>Team Name</th>
+                        <th style={{ padding: '8px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)' }}>Product Title</th>
+                        <th style={{ padding: '8px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)' }}>Submitted At</th>
+                        <th style={{ padding: '8px', textAlign: 'center', borderBottom: '2px solid var(--mdb-primary-color)' }}>Actions</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {votingStats.map(stat => (
-                        <tr key={stat.teamId}>
-                          <td>{stat.teamName}</td>
-                          <td>{stat.votes}</td>
+                      {submissions.length === 0 ? (
+                        <tr>
+                          <td colSpan="4" style={{ padding: '16px', textAlign: 'center', color: 'var(--mdb-text-color-light)' }}>
+                            No teams found for this session
+                          </td>
                         </tr>
-                      ))}
+                      ) : (
+                        submissions.map(team => (
+                          <tr key={team._id} style={{ borderBottom: '1px solid var(--mdb-border-color)' }}>
+                            <td style={{ padding: '8px' }}>{team.teamName}</td>
+                            <td style={{ padding: '8px' }}>{team.productTitle}</td>
+                            <td style={{ padding: '8px' }}>
+                              {team.submittedAt ? 
+                                new Date(team.submittedAt).toLocaleString() : 
+                                <span style={{ color: 'var(--mdb-text-color-light)' }}>Not submitted</span>
+                              }
+                            </td>
+                            <td style={{ padding: '8px', textAlign: 'center' }}>
+                              <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                                <button 
+                                  disabled 
+                                  style={{ 
+                                    padding: '4px 8px', 
+                                    backgroundColor: 'var(--mdb-info-color-light)',
+                                    color: 'var(--mdb-info-color)',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    opacity: 0.6,
+                                    cursor: 'not-allowed'
+                                  }}
+                                >
+                                  <i className="fas fa-edit"></i>
+                                </button>
+                                <button 
+                                  disabled 
+                                  style={{ 
+                                    padding: '4px 8px', 
+                                    backgroundColor: 'var(--mdb-danger-color-light)',
+                                    color: 'var(--mdb-danger-color)',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    opacity: 0.6,
+                                    cursor: 'not-allowed'
+                                  }}
+                                >
+                                  <i className="fas fa-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
+                
+                {/* Voting Stats */}
+                {votingStats.length > 0 && (
+                  <div>
+                    <h4 style={{ 
+                      marginBottom: '12px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}>
+                      <i className="fas fa-chart-bar"></i>
+                      Voting Progress
+                    </h4>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                      <thead>
+                        <tr style={{ backgroundColor: 'var(--mdb-info-color-light)' }}>
+                          <th style={{ padding: '8px', textAlign: 'left', borderBottom: '2px solid var(--mdb-info-color)' }}>Team</th>
+                          <th style={{ padding: '8px', textAlign: 'center', borderBottom: '2px solid var(--mdb-info-color)' }}>Votes</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {votingStats.map(stat => (
+                          <tr key={stat.teamId} style={{ borderBottom: '1px solid var(--mdb-border-color)' }}>
+                            <td style={{ padding: '8px' }}>{stat.teamName}</td>
+                            <td style={{ padding: '8px', textAlign: 'center', fontWeight: 'bold' }}>{stat.votes}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div style={{ 
+                height: '100%', 
+                display: 'flex', 
+                flexDirection: 'column', 
+                justifyContent: 'center', 
+                alignItems: 'center',
+                color: 'var(--mdb-text-color-light)',
+                padding: '40px 0'
+              }}>
+                <i className="fas fa-info-circle" style={{ fontSize: '2rem', marginBottom: '16px' }}></i>
+                <p>Select a session from the list to view details</p>
+              </div>
+            )}
+          </div>
+          
+          {/* Admin Users & Audit */}
+          <div className="admin-panel" style={{ 
+            padding: '16px', 
+            backgroundColor: 'var(--mdb-background-color-light)', 
+            borderRadius: '8px',
+            border: '1px solid var(--mdb-border-color)'
+          }}>
+            <h3 style={{ 
+              fontSize: '1.2rem', 
+              color: 'var(--mdb-primary-color)', 
+              marginBottom: '16px', 
+              borderBottom: '1px solid var(--mdb-border-color)', 
+              paddingBottom: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <i className="fas fa-user-shield"></i>
+              Admin Users
+            </h3>
+            
+            <div style={{ marginBottom: '24px' }}>
+              {adminUsers.length === 0 ? (
+                <div style={{ padding: '12px', textAlign: 'center', color: 'var(--mdb-text-color-light)' }}>
+                  No admin users found
+                </div>
+              ) : (
+                <div style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  gap: '8px',
+                  maxHeight: '150px',
+                  overflowY: 'auto'
+                }}>
+                  {adminUsers.map(admin => (
+                    <div 
+                      key={admin._id}
+                      style={{ 
+                        padding: '8px 12px', 
+                        backgroundColor: 'white', 
+                        borderRadius: '4px',
+                        border: '1px solid var(--mdb-border-color)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    >
+                      <i className="fas fa-user" style={{ color: 'var(--mdb-primary-color)' }}></i>
+                      <span>{admin.username}</span>
+                    </div>
+                  ))}
+                </div>
               )}
-            </>
-          )}
-        </div>
-        {/* Admin Users & Audit */}
-        <div style={{ flex: 1 }}>
-          <h3>Admin Users</h3>
-          <ul>
-            {adminUsers.map(admin => (
-              <li key={admin._id}>{admin.username}</li>
-            ))}
-          </ul>
-          <h3>Audit Log</h3>
-          <ul style={{ maxHeight: 150, overflowY: 'auto' }}>
-            {auditLogs.map(log => (
-              <li key={log._id}>
-                [{new Date(log.timestamp).toLocaleString()}] {log.action} by {log.user}
-              </li>
-            ))}
-          </ul>
+            </div>
+            
+            <h3 style={{ 
+              fontSize: '1.2rem', 
+              color: 'var(--mdb-primary-color)', 
+              marginBottom: '16px', 
+              borderBottom: '1px solid var(--mdb-border-color)', 
+              paddingBottom: '8px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}>
+              <i className="fas fa-history"></i>
+              Audit Log
+            </h3>
+            
+            <div style={{ 
+              maxHeight: '200px', 
+              overflowY: 'auto',
+              border: '1px solid var(--mdb-border-color)',
+              borderRadius: '4px',
+              backgroundColor: 'white'
+            }}>
+              {auditLogs.length === 0 ? (
+                <div style={{ padding: '12px', textAlign: 'center', color: 'var(--mdb-text-color-light)' }}>
+                  No audit logs found
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {auditLogs.map(log => (
+                    <div 
+                      key={log._id}
+                      style={{ 
+                        padding: '8px 12px', 
+                        borderBottom: '1px solid var(--mdb-border-color)',
+                        fontSize: '0.9rem'
+                      }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                        <span style={{ fontWeight: 'bold', color: 'var(--mdb-primary-color)' }}>{log.action}</span>
+                        <span style={{ fontSize: '0.8rem', color: 'var(--mdb-text-color-light)' }}>
+                          {new Date(log.timestamp).toLocaleString()}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: '0.85rem' }}>by {log.user}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
