@@ -188,7 +188,10 @@ function AdminDashboard() {
               ...styles.statCard,
               backgroundColor: 'var(--mdb-primary-color-light)', 
               boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
-              border: '1px solid var(--mdb-primary-color-light)'
+              border: '1px solid var(--mdb-primary-color-light)',
+              transform: 'translateY(0px)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              cursor: 'pointer'
             }}>
               <div style={{ fontSize: '1rem', color: 'var(--mdb-primary-color-dark)', marginBottom: '8px' }}>
                 <i className="fas fa-calendar-alt" style={{ marginRight: '8px' }}></i>
@@ -203,7 +206,10 @@ function AdminDashboard() {
               ...styles.statCard,
               backgroundColor: 'var(--mdb-success-color-light)', 
               boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
-              border: '1px solid var(--mdb-success-color-light)'
+              border: '1px solid var(--mdb-success-color-light)',
+              transform: 'translateY(0px)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              cursor: 'pointer'
             }}>
               <div style={{ fontSize: '1rem', color: 'var(--mdb-success-color-dark)', marginBottom: '8px' }}>
                 <i className="fas fa-users" style={{ marginRight: '8px' }}></i>
@@ -218,7 +224,10 @@ function AdminDashboard() {
               ...styles.statCard,
               backgroundColor: 'var(--mdb-info-color-light)', 
               boxShadow: '0 4px 8px rgba(0,0,0,0.05)',
-              border: '1px solid var(--mdb-info-color-light)'
+              border: '1px solid var(--mdb-info-color-light)',
+              transform: 'translateY(0px)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              cursor: 'pointer'
             }}>
               <div style={{ fontSize: '1rem', color: 'var(--mdb-info-color-dark)', marginBottom: '8px' }}>
                 <i className="fas fa-vote-yea" style={{ marginRight: '8px' }}></i>
