@@ -155,13 +155,13 @@ function Results() {
             color: var(--mdb-text-color-light, #5f6368);
           }
           .winner-display-section {
-            background-color: var(--mdb-success-color-light, #E6F4EA);
+            background: linear-gradient(135deg, var(--mdb-success-color-light, #E6F4EA) 0%, #f8fffa 100%);
             border: 2px solid var(--mdb-success-color, #34A853);
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 40px;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 50px;
             text-align: center;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
           }
           .winner-display-section .trophy-icon {
             font-size: 4rem;
@@ -175,32 +175,52 @@ function Results() {
           }
           .winner-card {
             background-color: #fff;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: inline-block; /* For centering if needed or specific width */
-            max-width: 600px; /* Control width */
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            width: 85%; /* Wider card */
+            max-width: 800px; /* Increased max width */
             margin: 0 auto; /* Center the card */
             text-align: left;
+            border: 1px solid var(--mdb-success-color-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+          }
+          .winner-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
           }
           .winner-card h3 {
             color: var(--mdb-primary-color);
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--mdb-success-color-light);
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          }
+          .winner-card h3 i {
+            color: gold;
           }
           .winner-card .details p, .winner-card .solution-text p {
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
             color: var(--mdb-text-color, #3c4043);
+            line-height: 1.6;
           }
           .winner-card .details strong {
             color: var(--mdb-text-color-dark, #202124);
           }
           .winner-card .votes {
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: var(--mdb-primary-color);
-            margin-top: 15px;
+            margin-top: 20px;
+            background-color: var(--mdb-primary-color-light);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
           }
           .team-ranking-section h2 {
             text-align: center;
@@ -280,16 +300,16 @@ function Results() {
           <div className="trophy-icon"><i className="fas fa-trophy"></i></div>
           <h2>And The Winner Is...</h2>
           <div className="winner-card">
-            <h3>{primaryWinner.teamName}</h3>
+            <h3><i className="fas fa-crown"></i> {primaryWinner.teamName}</h3>
             <div className="details">
-              <p><strong>Product Idea:</strong> {primaryWinner.productTitle || 'N/A'}</p>
+              <p><strong>Problem Statement/Use Case:</strong> {primaryWinner.productTitle || 'N/A'}</p>
               {primaryWinner.solution && (
                 <div className="solution-text">
                   <p><strong>Winning Solution:</strong></p>
-                  <p style={{whiteSpace: 'pre-line'}}>{primaryWinner.solution}</p>
+                  <div style={{whiteSpace: 'pre-line', backgroundColor: 'var(--mdb-background-color-light)', padding: '20px', borderRadius: '8px', border: '1px solid var(--mdb-border-color)'}}>{primaryWinner.solution}</div>
                 </div>
               )}
-              <p className="votes">Total Votes: {primaryWinner.totalVotes}</p>
+              <p className="votes"><i className="fas fa-vote-yea"></i> Total Votes: {primaryWinner.totalVotes}</p>
             </div>
           </div>
         </section>
@@ -304,7 +324,7 @@ function Results() {
             {rankedTeams.map((team, index) => (
               <div key={team._id} className={`team-card ${winners.some(w => w._id === team._id) && team._id === primaryWinner?._id ? 'is-winner-card' : ''}`}>
                 <h4>{index + 1}. {team.teamName}</h4>
-                <p><strong>Idea:</strong> {team.productTitle || 'N/A'}</p>
+                <p><strong>Problem Statement/Use Case:</strong> {team.productTitle || 'N/A'}</p>
                 {team.solution && (
                   <details>
                     <summary className="solution-preview">View Solution</summary>

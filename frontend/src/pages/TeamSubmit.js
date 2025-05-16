@@ -398,7 +398,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
                     <input 
                       id="productTitle"
                       type="text" 
-                      placeholder="Enter your product title" 
+                      placeholder="Enter your problem statement or use case" 
                       value={productTitle} 
                       onChange={e => setProductTitle(e.target.value)} 
                       required 

@@ -464,8 +464,8 @@ function AdminDashboard() {
                   <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: '0', borderRadius: '8px', overflow: 'hidden' }}>
                     <thead>
                       <tr style={{ backgroundColor: 'var(--mdb-primary-color-light)' }}>
-                        <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Team Name</th>
-                        <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Product Title</th>
+                        <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Team Number</th>
+                        <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Problem Statement/Use Case</th>
                         <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Submitted At</th>
                         <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid var(--mdb-primary-color)', fontWeight: '600' }}>Actions</th>
                       </tr>
