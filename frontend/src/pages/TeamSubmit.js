@@ -247,7 +247,7 @@ function TeamSubmit({ sessionId: propSessionId }) {
   return (
     <div className="mongodb-theme" style={{ maxWidth: '800px', margin: '0 auto', padding: '20px' }}>
       <div className="mongodb-card" style={{ padding: '24px', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-        <h2 className="mdb-header-2" style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--mdb-primary-color)' }}>Team Submission</h2>
+        <h2 className="mdb-header-2" style={{ textAlign: 'center', marginBottom: '24px', color: 'var(--mdb-primary-color)' }}>Submission Form</h2>
         
         {/* Message display */}
         {message && (
@@ -388,12 +388,12 @@ function TeamSubmit({ sessionId: propSessionId }) {
                 <div className="form-section" style={{ marginBottom: '20px' }}>
                   <h3 style={{ fontSize: '1.2rem', color: 'var(--mdb-primary-color)', marginBottom: '16px', borderBottom: '1px solid var(--mdb-border-color)', paddingBottom: '8px' }}>
                     <i className="fas fa-lightbulb" style={{ marginRight: '8px' }}></i>
-                    User Story
+                    Team Submission
                   </h3>
                   
                   <div className="form-group" style={{ marginBottom: '16px' }}>
                     <label htmlFor="productTitle" style={{ display: 'block', marginBottom: '8px', fontWeight: '600' }}>
-                      Problem Statement <span style={{ color: 'red' }}>*</span>
+                      User Story <span style={{ color: 'red' }}>*</span>
                     </label>
                     <input 
                       id="productTitle"
